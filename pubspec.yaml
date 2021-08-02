@@ -1,7 +1,7 @@
 name: stacked_chart
 description: A simple package while provide easy way to generate stacked chart.
 version: 0.0.1
-homepage:
+repository: https://github.com/Bikram-Shrestha/stacked_chart
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
