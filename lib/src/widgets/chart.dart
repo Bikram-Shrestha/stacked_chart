@@ -22,12 +22,14 @@ class StackedChart extends StatelessWidget {
   /// max scale to represent the bar. Default value is 5
   final double buffer;
   final List<ChartData> data;
+  final TextStyle? labelStyle;
 
   final bool showLabel;
   const StackedChart({
     Key? key,
     required this.size,
     required this.data,
+    this.labelStyle,
     this.buffer = 5,
     this.barWidth = 15,
     this.showLabel = false,
@@ -51,6 +53,9 @@ class StackedChart extends StatelessWidget {
                   showLabel: showLabel,
                   data: value,
                   label: value.barLabel,
+                  labelStyle: labelStyle ??
+                      Theme.of(context).textTheme.caption ??
+                      TextStyle(),
                 ),
               ),
             )
@@ -66,6 +71,7 @@ class Bar extends StatelessWidget {
     required this.size,
     required this.data,
     required this.maxValue,
+    required this.labelStyle,
     this.showLabel = false,
     this.label,
   }) : super(key: key);
@@ -75,6 +81,7 @@ class Bar extends StatelessWidget {
   final bool showLabel;
   final String? label;
   final num maxValue;
+  final TextStyle labelStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -92,10 +99,15 @@ class Bar extends StatelessWidget {
           ),
         ),
         if (showLabel)
+          SizedBox(
+            height: 5,
+          ),
+        if (showLabel)
           Flexible(
               flex: 2,
               child: Text(
                 label ?? '',
+                style: labelStyle,
                 overflow: TextOverflow.ellipsis,
               ))
       ],

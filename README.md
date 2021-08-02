@@ -7,7 +7,7 @@ A flutter package for creating a stack barchart with easy customization.
 In the `dependencies:` section of your `pubspec.yaml`, add the following line:
 
 ```yaml
-stacked_bar_chart:
+stacked_chart:
 ```
 
 Then `import` it as :
