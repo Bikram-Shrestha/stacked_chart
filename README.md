@@ -9,7 +9,14 @@ Without Shadow
 
 ![animation](https://user-images.githubusercontent.com/30488716/127808681-453a915f-1b90-42b9-89e4-24c681fdb534.gif)
 
+
+Animation for the onPressed callback
+
+![onPress animation](https://user-images.githubusercontent.com/30488716/128816523-7c70c4a2-dbef-4527-bfc4-754807294c0d.gif)
+
+
 A flutter package for creating a stack barchart with easy customization.
+
 
 ## Installation
 In the `dependencies:` section of your `pubspec.yaml`, add the following line:
