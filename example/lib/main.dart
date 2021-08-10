@@ -59,14 +59,14 @@ class _WeeklyChartDemoState extends State<WeeklyChartDemo> {
     WeekDay.values
         .map(
           (day) => weeklyData.add(BookingStatus(
-            dateTime: DateTime.now().add(
-              Duration(days: day.index),
-            ),
-            bookings: {
-              'Unfilled booking': rng.nextInt(20),
-              'Filled booking': rng.nextInt(20),
-            },
-          )),
+              dateTime: DateTime.now().add(
+                Duration(days: day.index),
+              ),
+              bookings: {
+                'Unfilled booking': rng.nextInt(20),
+                'Filled booking': rng.nextInt(20),
+              },
+              onPressed: createRandomWeeklyStatus)),
         )
         .toList();
     setState(() {
@@ -76,14 +76,11 @@ class _WeeklyChartDemoState extends State<WeeklyChartDemo> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: createRandomWeeklyStatus,
-      child: StackedChart(
-        data: weeklyStatus,
-        size: const Size(300, 150),
-        showLabel: true,
-        enableShadow: true,
-      ),
+    return StackedChart(
+      data: weeklyStatus,
+      size: const Size(300, 150),
+      showLabel: true,
+      enableShadow: true,
     );
   }
 }
@@ -92,6 +89,7 @@ class BookingStatus extends ChartData<LabelData, int>
     implements Comparable<BookingStatus> {
   final DateTime dateTime;
   final Map<String, int> bookings;
+  final VoidCallback? onPressed;
 
   static Map<LabelData, int> convertBookingToMapOfLabelDataInt(
       Map<String, int> bookings) {
@@ -105,10 +103,13 @@ class BookingStatus extends ChartData<LabelData, int>
   int get totalBookingCount =>
       bookings.values.reduce((total, value) => total = total + value);
 
-  BookingStatus({required this.dateTime, this.bookings = const {}})
+  BookingStatus(
+      {required this.dateTime, this.bookings = const {}, this.onPressed})
       : super(
-            labelWithValue: convertBookingToMapOfLabelDataInt(bookings),
-            barLabel: dateTime.day.toString());
+          labelWithValue: convertBookingToMapOfLabelDataInt(bookings),
+          barLabel: dateTime.day.toString(),
+          onPressed: onPressed,
+        );
 
   @override
   int compareTo(BookingStatus other) => dateTime.compareTo(other.dateTime);

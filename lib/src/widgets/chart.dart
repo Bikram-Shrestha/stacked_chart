@@ -125,7 +125,7 @@ class Bar extends StatelessWidget {
   }
 }
 
-class _BarStack extends StatelessWidget {
+class _BarStack extends StatefulWidget {
   const _BarStack({
     Key? key,
     required this.data,
@@ -141,45 +141,85 @@ class _BarStack extends StatelessWidget {
   final bool enableShadow;
 
   @override
+  __BarStackState createState() => __BarStackState();
+}
+
+class __BarStackState extends State<_BarStack>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
+    _scale = Tween<double>(begin: 1, end: .95).animate(_controller);
+  }
+
+  void _onTapDown(_) => _controller.forward();
+
+  void _onTapUp(_) => _controller.reverse();
+
+  void _onTapCancelled() => _controller.reverse();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Stack(alignment: Alignment.bottomCenter, children: [
-      GestureDetector(
-        onTap: data.onPressed,
-        child: Container(
-          child: _BarWidget(
-            barColor: data.barBackGroundColor ?? barColors.last,
-            barSize: size,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(1, 1),
-                blurRadius: 4,
-                spreadRadius: 1,
-                color: Color.fromRGBO(135, 135, 135, enableShadow ? 1 : 0),
-              )
-            ],
-          ),
-        ),
-      ),
-      ...data.labelWithValue.entries
-          .map(
-            (e) => Tooltip(
-              message: '${e.key.label}: ${e.value}',
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.data.onPressed,
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancelled,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) => Transform.scale(
+          scale: _scale.value,
+          child: Stack(alignment: Alignment.bottomCenter, children: [
+            Container(
               child: _BarWidget(
-                barColor: e.key.color ??
-                    barColors[
-                        data.getIndexForGivenKey(e.key) % barColors.length],
-                barSize: Size(
-                    size.width,
-                    (size.height / maxValue) *
-                        data.getHeightValueForGivenKey(e.key)),
+                barColor: widget.data.barBackGroundColor ?? barColors.last,
+                barSize: widget.size,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(1, 1),
+                    blurRadius: 4,
+                    spreadRadius: 1,
+                    color: Color.fromRGBO(
+                        135, 135, 135, widget.enableShadow ? 1 : 0),
+                  )
+                ],
               ),
             ),
-          )
-          .toList()
-    ]);
+            ...widget.data.labelWithValue.entries
+                .map(
+                  (e) => Tooltip(
+                    message: '${e.key.label}: ${e.value}',
+                    child: _BarWidget(
+                      barColor: e.key.color ??
+                          barColors[widget.data.getIndexForGivenKey(e.key) %
+                              barColors.length],
+                      barSize: Size(
+                          widget.size.width,
+                          (widget.size.height / widget.maxValue) *
+                              widget.data.getHeightValueForGivenKey(e.key)),
+                    ),
+                  ),
+                )
+                .toList()
+          ]),
+        ),
+      ),
+    );
   }
 }
 
