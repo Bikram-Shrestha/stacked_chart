@@ -102,22 +102,23 @@ class Bar extends StatelessWidget {
             child: _BarStack(
               enableShadow: enableShadow,
               data: data,
-              size: size,
+              size: Size(size.width, size.height * (showLabel ? .8 : 1)),
               maxValue: maxValue,
             ),
           ),
         ),
         if (showLabel)
-          SizedBox(
-            height: 5,
-          ),
-        if (showLabel)
           Flexible(
               flex: 2,
-              child: Text(
-                label ?? '',
-                style: labelStyle,
-                overflow: TextOverflow.ellipsis,
+              child: Column(
+                children: [
+                  SizedBox(height: 5),
+                  Text(
+                    label ?? '',
+                    style: labelStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ))
       ],
     );
