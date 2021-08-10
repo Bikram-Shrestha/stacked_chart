@@ -82,6 +82,7 @@ class _WeeklyChartDemoState extends State<WeeklyChartDemo> {
         data: weeklyStatus,
         size: const Size(300, 150),
         showLabel: true,
+        enableShadow: true,
       ),
     );
   }

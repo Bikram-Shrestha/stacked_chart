@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stacked_chart/src/data/data.dart';
-import 'package:stacked_chart/src/extension/context.dart';
 
 ///Default color that is used when no color is passed
 const barColors = [
@@ -24,6 +23,10 @@ class StackedChart extends StatelessWidget {
   final List<ChartData> data;
   final TextStyle? labelStyle;
 
+  /// Whether to enable shadow behind the barchart to alter
+  /// material look or flat glass like look
+  final bool enableShadow;
+
   final bool showLabel;
   const StackedChart({
     Key? key,
@@ -33,6 +36,7 @@ class StackedChart extends StatelessWidget {
     this.buffer = 5,
     this.barWidth = 15,
     this.showLabel = false,
+    this.enableShadow = true,
   }) : super(key: key);
 
   num get maxValue => data.getMaxValue;
@@ -48,6 +52,7 @@ class StackedChart extends StatelessWidget {
               (value) => SizedBox.fromSize(
                 size: Size(size.width / data.length, size.height),
                 child: Bar(
+                  enableShadow: enableShadow,
                   maxValue: maxValue + buffer,
                   size: Size(barWidth, size.height),
                   showLabel: showLabel,
@@ -72,7 +77,8 @@ class Bar extends StatelessWidget {
     required this.data,
     required this.maxValue,
     required this.labelStyle,
-    this.showLabel = false,
+    required this.showLabel,
+    required this.enableShadow,
     this.label,
   }) : super(key: key);
 
@@ -82,6 +88,7 @@ class Bar extends StatelessWidget {
   final String? label;
   final num maxValue;
   final TextStyle labelStyle;
+  final bool enableShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +100,9 @@ class Bar extends StatelessWidget {
           child: SizedBox.fromSize(
             size: size,
             child: _BarStack(
+              enableShadow: enableShadow,
               data: data,
+              size: size,
               maxValue: maxValue,
             ),
           ),
@@ -120,21 +129,37 @@ class _BarStack extends StatelessWidget {
     Key? key,
     required this.data,
     required this.maxValue,
+    required this.size,
+    required this.enableShadow,
   }) : super(key: key);
 
   final num maxValue;
 
+  final Size size;
   final ChartData data;
+  final bool enableShadow;
 
   @override
   Widget build(BuildContext context) {
-    final size = context.sizeOfWidget;
     return Stack(alignment: Alignment.bottomCenter, children: [
       GestureDetector(
         onTap: data.onPressed,
-        child: _BarWidget(
-          barColor: data.barBackGroundColor ?? barColors.last,
-          barSize: size,
+        child: Container(
+          child: _BarWidget(
+            barColor: data.barBackGroundColor ?? barColors.last,
+            barSize: size,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(1, 1),
+                blurRadius: 4,
+                spreadRadius: 1,
+                color: Color.fromRGBO(135, 135, 135, enableShadow ? 1 : 0),
+              )
+            ],
+          ),
         ),
       ),
       ...data.labelWithValue.entries

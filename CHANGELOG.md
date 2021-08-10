@@ -1,3 +1,7 @@
+## 0.0.3
+* Added optional `enableShadow` to toggle material and glass look for the bar
+* Code clean up
+
 ## 0.0.2
 
 * Added optional `labelStyle` to style the label.
