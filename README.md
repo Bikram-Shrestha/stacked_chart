@@ -1,4 +1,12 @@
 # stacked_chart
+With Shadow
+
+<img width="494" alt="Screen Shot 2021-08-10 at 2 27 33 pm" src="https://user-images.githubusercontent.com/30488716/128808291-df9a5c1d-ee19-4360-96e2-51dd213698c6.png">
+
+
+
+Without Shadow 
+
 ![animation](https://user-images.githubusercontent.com/30488716/127808681-453a915f-1b90-42b9-89e4-24c681fdb534.gif)
 
 A flutter package for creating a stack barchart with easy customization.
