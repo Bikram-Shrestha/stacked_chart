@@ -1,3 +1,5 @@
+## 0.0.6
+* Added MainAxisAlignment to align the stack bar accordingly.
 ## 0.0.5
 * Added OnPressed animation so that the bar animate as if you are pressing button
 ## 0.0.4

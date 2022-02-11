@@ -1,6 +1,6 @@
 name: stacked_chart
 description: A simple package which provide easy way to generate stacked bar chart.
-version: 0.0.5
+version: 0.0.6
 repository: https://github.com/Bikram-Shrestha/stacked_chart
 
 environment:
