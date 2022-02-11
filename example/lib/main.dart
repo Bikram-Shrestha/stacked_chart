@@ -78,6 +78,7 @@ class _WeeklyChartDemoState extends State<WeeklyChartDemo> {
   Widget build(BuildContext context) {
     return StackedChart(
       data: weeklyStatus,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       size: const Size(300, 150),
       showLabel: true,
       enableShadow: true,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:stacked_chart/src/data/data.dart';
 
 ///Default color that is used when no color is passed
@@ -22,22 +21,24 @@ class StackedChart extends StatelessWidget {
   final double buffer;
   final List<ChartData> data;
   final TextStyle? labelStyle;
+  final MainAxisAlignment mainAxisAlignment;
 
   /// Whether to enable shadow behind the barchart to alter
   /// material look or flat glass like look
   final bool enableShadow;
 
   final bool showLabel;
-  const StackedChart({
-    Key? key,
-    required this.size,
-    required this.data,
-    this.labelStyle,
-    this.buffer = 5,
-    this.barWidth = 15,
-    this.showLabel = false,
-    this.enableShadow = true,
-  }) : super(key: key);
+  const StackedChart(
+      {Key? key,
+      required this.size,
+      required this.data,
+      this.labelStyle,
+      this.buffer = 5,
+      this.barWidth = 15,
+      this.showLabel = false,
+      this.enableShadow = true,
+      this.mainAxisAlignment = MainAxisAlignment.spaceEvenly})
+      : super(key: key);
 
   num get maxValue => data.getMaxValue;
 
@@ -46,7 +47,7 @@ class StackedChart extends StatelessWidget {
     return SizedBox.fromSize(
       size: size,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: mainAxisAlignment,
         children: data
             .map(
               (value) => SizedBox.fromSize(
