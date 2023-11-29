@@ -27,10 +27,7 @@ class StackedChart extends StatelessWidget {
   /// max scale to represent the bar. Default value is 5
   final double buffer;
 
-  /// List of [ChartData] which contains Map of type K and V value and optional
-  /// onPressed function that can be used to call when the individual bar of
-  /// barchart is pressed, you can pass [barLabel] and [barBackGroundColor] to
-  /// customize bar
+  /// List of [ChartData] which contains ChartData<LabelData, num>
   final List<ChartData> data;
 
   /// Whether to enable shadow behind the barchart to alter
