@@ -9,27 +9,8 @@ const barColors = [
 ];
 
 class StackedChart extends StatelessWidget {
-  /// Size of the widget itself. Please consider the
-  /// value being passed as it need to hold given [barWidth]
-  final Size size;
-
-  /// Default value is 15
-  final double barWidth;
-
-  /// Buffer represent the space between the max value and
-  /// max scale to represent the bar. Default value is 5
-  final double buffer;
-  final List<ChartData> data;
-  final TextStyle? labelStyle;
-  final MainAxisAlignment mainAxisAlignment;
-
-  /// Whether to enable shadow behind the barchart to alter
-  /// material look or flat glass like look
-  final bool enableShadow;
-
-  final bool showLabel;
   const StackedChart(
-      {Key? key,
+      {super.key,
       required this.size,
       required this.data,
       this.labelStyle,
@@ -37,10 +18,34 @@ class StackedChart extends StatelessWidget {
       this.barWidth = 15,
       this.showLabel = false,
       this.enableShadow = true,
-      this.mainAxisAlignment = MainAxisAlignment.spaceEvenly})
-      : super(key: key);
+      this.mainAxisAlignment = MainAxisAlignment.spaceEvenly});
 
-  num get maxValue => data.getMaxValue;
+  /// Default value is 15
+  final double barWidth;
+
+  /// Buffer represent the space between the max value and
+  /// max scale to represent the bar. Default value is 5
+  final double buffer;
+
+  /// List of [ChartData] which contains Map of type K and V value and optional
+  /// onPressed function that can be used to call when the individual bar of
+  /// barchart is pressed, you can pass [barLabel] and [barBackGroundColor] to
+  /// customize bar
+  final List<ChartData> data;
+
+  /// Whether to enable shadow behind the barchart to alter
+  /// material look or flat glass like look
+  final bool enableShadow;
+
+  final TextStyle? labelStyle;
+  final MainAxisAlignment mainAxisAlignment;
+  final bool showLabel;
+
+  /// Size of the widget itself. Please consider the
+  /// value being passed as it need to hold given [barWidth]
+  final Size size;
+
+  num get _maxValue => data.maxValue;
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +59,13 @@ class StackedChart extends StatelessWidget {
                 size: Size(size.width / data.length, size.height),
                 child: Bar(
                   enableShadow: enableShadow,
-                  maxValue: maxValue + buffer,
+                  maxValue: _maxValue + buffer,
                   size: Size(barWidth, size.height),
                   showLabel: showLabel,
                   data: value,
                   label: value.barLabel,
                   labelStyle: labelStyle ??
-                      Theme.of(context).textTheme.caption ??
+                      Theme.of(context).textTheme.bodySmall ??
                       TextStyle(),
                 ),
               ),
@@ -84,12 +89,12 @@ class Bar extends StatelessWidget {
   }) : super(key: key);
 
   final ChartData data;
-  final Size size;
-  final bool showLabel;
-  final String? label;
-  final num maxValue;
-  final TextStyle labelStyle;
   final bool enableShadow;
+  final String? label;
+  final TextStyle labelStyle;
+  final num maxValue;
+  final bool showLabel;
+  final Size size;
 
   @override
   Widget build(BuildContext context) {
@@ -135,11 +140,10 @@ class _BarStack extends StatefulWidget {
     required this.enableShadow,
   }) : super(key: key);
 
-  final num maxValue;
-
-  final Size size;
   final ChartData data;
   final bool enableShadow;
+  final num maxValue;
+  final Size size;
 
   @override
   __BarStackState createState() => __BarStackState();
@@ -149,6 +153,12 @@ class __BarStackState extends State<_BarStack>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late Animation<double> _scale;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   void initState() {
@@ -163,12 +173,6 @@ class __BarStackState extends State<_BarStack>
   void _onTapUp(_) => _controller.reverse();
 
   void _onTapCancelled() => _controller.reverse();
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

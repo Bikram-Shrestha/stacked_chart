@@ -2,18 +2,23 @@ import 'dart:ui';
 
 /// Contain Map of type K and V value and optional onPressed function
 /// that can be used to call when the individual bar of barchart is
-/// pressed
+/// pressed, you can pass [barLabel] and [barBackGroundColor] to customize bar
 class ChartData<K extends LabelData, V extends num> {
-  final Map<K, V> labelWithValue;
-  final VoidCallback? onPressed;
-  final Color? barBackGroundColor;
-  final String barLabel;
   const ChartData({
     required this.labelWithValue,
     required this.barLabel,
     this.barBackGroundColor,
     this.onPressed,
   });
+
+  /// Color that will fill the bar
+  final Color? barBackGroundColor;
+
+  /// Label for the bar
+  final String barLabel;
+
+  final Map<K, V> labelWithValue;
+  final VoidCallback? onPressed;
 
   /// Calculate the maximum value that is present in the value of type V
   V get maxSize => labelWithValue.isNotEmpty
@@ -53,13 +58,14 @@ class ChartData<K extends LabelData, V extends num> {
 
 /// Contain label and color for the chart
 class LabelData {
-  final String label;
-  final Color? color;
   LabelData(this.label, [this.color]);
+
+  final Color? color;
+  final String label;
 }
 
 extension MaxSizeX on List<ChartData> {
-  num get getMaxValue {
+  num get maxValue {
     num maxValue = 0;
     forEach((e) => e.maxSize > maxValue ? maxValue = e.maxSize : 0);
     return maxValue;
